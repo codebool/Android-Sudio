@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FetchWeatherTask().execute("https://api.openweathermap.org/data/2.5/weather?q=Ottawa,ca&APPID=1712c545a8c8092e02b65c55a76c5e95");
+                // new FetchWeatherTask().execute("http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=bd5e378503939ddaee76f12ad7a97608");
+//                 new FetchWeatherTask().execute("https://api.openweathermap.org/data/2.5/weather?q=Ottawa,ca&APPID=080c60be76c8fe36e624dc83b2550bbb");
+                new FetchWeatherTask().execute("https://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=080c60be76c8fe36e624dc83b2550bbb");
             }
         });
     }
@@ -65,51 +67,40 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            super.onPostExecute(result);
             try {
                 JSONObject jsonObject = new JSONObject(result);
+                JSONArray listArray = jsonObject.getJSONArray("list");
                 StringBuilder formattedResult = new StringBuilder();
 
-                // There is no JSON Array List name: "list" in the JSON response. So, we can directly extract the data from the root level
+                for (int i = 0; i < listArray.length(); i++) {
+                    JSONObject listObject = listArray.getJSONObject(i);
+                    long dateTimeInMillis = listObject.getLong("dt") * 1000; // Convert to milliseconds
+                    Date date = new Date(dateTimeInMillis);
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, MMMM d, YYYY h:mm a", Locale.getDefault());
+                    String dateText = dateFormatter.format(date);
 
-                // Extract the timestamp at the root level and format it
-                long dateTimeInMillis = jsonObject.getLong("dt") * 1000;
-                Date date = new Date(dateTimeInMillis);
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("EEEE, MMMM d, yyyy h:mm a", Locale.getDefault());
-                String dateText = dateFormatter.format(date);
+                    JSONObject main = listObject.getJSONObject("main");
+                    double temp = main.getDouble("temp") - 273.15; // Convert from Kelvin to Celsius
+                    String temperature = String.format(Locale.getDefault(), "%.1f°C", temp);
 
-                // Extract the main temperature data
-                JSONObject main = jsonObject.getJSONObject("main");
-                double temp = main.getDouble("temp") - 273.15; // Convert Kelvin to Celsius
-                String temperature = String.format(Locale.getDefault(), "%.1f°C", temp);
-                int humidity = main.getInt("humidity");
+                    JSONArray weatherArray = listObject.getJSONArray("weather");
+                    JSONObject weather = weatherArray.getJSONObject(0);
+                    String description = weather.getString("description");
 
-                // Extract weather description
-                JSONArray weatherArray = jsonObject.getJSONArray("weather");
-                JSONObject weather = weatherArray.getJSONObject(0);
-                String description = weather.getString("description");
+                    formattedResult.append(dateText)
+                            .append("\nWeather: ").append(description)
+                            .append("\nTemperature: ").append(temperature)
+                            .append("\n\n");
+                }
 
-                // Extract wind data
-                JSONObject wind = jsonObject.getJSONObject("wind");
-                double windSpeed = wind.getDouble("speed");
-                int windDirection = wind.getInt("deg");
-
-                // Append all extracted data to formattedResult
-                formattedResult.append("Date: ").append(dateText)
-                        .append("\nWeather: ").append(description)
-                        .append("\nTemperature: ").append(temperature)
-                        .append("\nHumidity: ").append(humidity).append("%")
-                        .append("\nWind: ").append(String.format(Locale.getDefault(), "%.1f m/s, %d°", windSpeed, windDirection))
-                        .append("\n\n");
-
-                // Display the result in the weatherTextView
                 weatherTextView.setText(formattedResult.toString());
-
             } catch (Exception e) {
                 e.printStackTrace();
                 weatherTextView.setText("Failed to parse data");
             }
-
         }
+
 
     }
 
