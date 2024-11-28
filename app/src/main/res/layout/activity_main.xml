@@ -14,8 +14,20 @@
         android:id="@+id/button_refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refresh"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginLeft="92dp"
+        android:layout_marginBottom="7dp"
+        android:text="Refresh" />
+
+    <Button
+        android:id="@+id/button_go_to_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="220dp"
+        android:layout_marginBottom="8dp"
+        android:text="Go to Toolbar page" />
 
 </RelativeLayout>

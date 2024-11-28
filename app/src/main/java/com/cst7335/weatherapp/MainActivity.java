@@ -1,5 +1,6 @@
 package com.cst7335.weatherapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         weatherTextView = findViewById(R.id.textView_weather);
         Button refreshButton = findViewById(R.id.button_refresh);
+        Button gotoTestToolbar = findViewById(R.id.button_go_to_toolbar);
 
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
                 // new FetchWeatherTask().execute("http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=bd5e378503939ddaee76f12ad7a97608");
 //                 new FetchWeatherTask().execute("https://api.openweathermap.org/data/2.5/weather?q=Ottawa,ca&APPID=080c60be76c8fe36e624dc83b2550bbb");
                 new FetchWeatherTask().execute("https://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=080c60be76c8fe36e624dc83b2550bbb");
+            }
+        });
+
+        // Set an OnClickListener on the button to start the TestToolbar activity
+        gotoTestToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the TestToolbar activity when the button is clicked
+                Intent intent = new Intent(MainActivity.this, TestToolbar.class);
+                startActivity(intent);
             }
         });
     }

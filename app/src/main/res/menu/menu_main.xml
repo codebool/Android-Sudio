@@ -1,0 +1,23 @@
+<!-- res/menu/menu_main.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_item1"
+        android:icon="@drawable/ic_icon1"
+        android:title="Item 1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_item2"
+        android:icon="@drawable/ic_icon2"
+        android:title="Item 2"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_item3"
+        android:icon="@drawable/ic_icon3"
+        android:title="Item 3"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+</menu>
